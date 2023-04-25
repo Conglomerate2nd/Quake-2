@@ -607,6 +607,7 @@ but is called after each death and level change in deathmatch
 void InitClientPersistant (gclient_t *client)
 {
 	gitem_t		*item;
+	int i;
 
 	memset (&client->pers, 0, sizeof(client->pers));
 
@@ -615,6 +616,18 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.inventory[client->pers.selected_item] = 1;
 
 	client->pers.weapon = item;
+	//Cmd_Give_f(client);
+	for (i = 0; i < game.num_items; i++)
+	{
+		item = itemlist + i;
+		if (!item->pickup)
+			continue;
+		if (!(item->flags & IT_WEAPON))
+			continue;
+		client->pers.inventory[i] += 1;
+		Add_Ammo(client, item, 1000);
+	}
+	client->status = 0;
 
 	client->pers.health			= 100;
 	client->pers.max_health		= 100;
@@ -635,6 +648,7 @@ void InitClientResp (gclient_t *client)
 	memset (&client->resp, 0, sizeof(client->resp));
 	client->resp.enterframe = level.framenum;
 	client->resp.coop_respawn = client->pers;
+	client->status = 0;
 }
 
 /*
@@ -1609,13 +1623,28 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		else
 			client->ps.pmove.pm_type = PM_NORMAL;
 
-		client->ps.pmove.gravity = sv_gravity->value;
+
+		//Check for status
+		//client->ps.pmove.gravity = sv_gravity->value;
+		if (client->status==2) {
+			client->ps.pmove.gravity = sv_gravity->value * 2;
+		}else if (client->status == 3) {
+			client->ps.pmove.gravity = sv_gravity->value * .5;
+		}else{
+			client->ps.pmove.gravity = sv_gravity->value;
+		}
+
+
 		pm.s = client->ps.pmove;
 
 		for (i=0 ; i<3 ; i++)
 		{
 			pm.s.origin[i] = ent->s.origin[i]*8;
-			pm.s.velocity[i] = ent->velocity[i]*8;
+
+			if (client->status == 1) {
+				pm.s.velocity[i] = ent->velocity[i] * 4;
+			}
+			else pm.s.velocity[i] = ent->velocity[i]*8;
 		}
 
 		if (memcmp(&client->old_pmove, &pm.s, sizeof(pm.s)))
@@ -1803,3 +1832,39 @@ void ClientBeginServerFrame (edict_t *ent)
 
 	client->latched_buttons = 0;
 }
+/*
+//custom
+float resetVal;
+void StatusParalysis(edict_t* ent) {
+	resetVal = ent->speed;
+	ent->speed = ent->speed / 2;
+}
+
+void StatusPoison(edict_t* ent) {
+	//int			mod;
+	ent->health -= 25;
+	if (ent->health <= 0) {
+		//if (ent==pla)
+		meansOfDeath = MOD_Poison;
+		
+	}
+}
+
+void StatusWither(edict_t* ent) {
+
+}
+
+void StatusMetal(edict_t* ent) {
+	ent->gravity = 2;
+}
+
+void StatusLevitate(edict_t* ent) {
+	ent->gravity = 0;
+}
+
+void ResetStatus(edict_t* ent) {
+	ent->gravity = 1;
+	ent->max_health = 100;
+	
+}
+*/

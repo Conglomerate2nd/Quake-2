@@ -946,6 +946,44 @@ void Cmd_Say_f (edict_t *ent, qboolean team, qboolean arg0)
 	}
 }
 
+
+/*
+=================
+Status
+=================
+*/
+
+void Cmd_Status_f(edict_t* ent)
+{
+	char* name;
+	gitem_t* it;
+	int			index;
+	int			i;
+	qboolean	give_all;
+	edict_t* it_ent;
+	gclient_t* cl;
+
+	if (deathmatch->value && !sv_cheats->value)
+	{
+		gi.cprintf(ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
+		return;
+	}
+
+	name = gi.args();
+
+	if (Q_stricmp(name, "paralysis") == 0) {
+		StatusParalysis(cl);
+	}
+	else if(Q_stricmp(name, "levitate") == 0) {
+		StatusLevitate(cl);
+	}
+	else if (Q_stricmp(name, "metal") == 0) {
+		StatusMetal(cl);
+	}
+
+}
+
+
 /*
 =================
 ClientCommand
@@ -1060,6 +1098,11 @@ void ClientCommand (edict_t *ent)
 	} else if (Q_stricmp(cmd, "observer") == 0) {
 		CTFObserver(ent);
 	}
+	//custom
+	else if (Q_stricmp(cmd, "status") == 0) {
+		Cmd_Status_f(ent);
+	}
+	
 //ZOID
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);

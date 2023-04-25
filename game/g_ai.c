@@ -1115,3 +1115,4 @@ void ai_run (edict_t *self, float dist)
 	if (self)
 		self->goalentity = save;
 }
+

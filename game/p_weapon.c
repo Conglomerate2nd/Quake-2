@@ -856,13 +856,23 @@ void Weapon_Blaster_Fire (edict_t *ent)
 	ent->client->ps.gunframe++;
 }
 
+/* original
 void Weapon_Blaster (edict_t *ent)
 {
 	static int	pause_frames[]	= {19, 32, 0};
 	static int	fire_frames[]	= {5, 0};
 
 	Weapon_Generic (ent, 4, 8, 52, 55, pause_frames, fire_frames, Weapon_Blaster_Fire);
+}*/
+
+void Weapon_Blaster(edict_t* ent)
+{
+	static int	pause_frames[] = { 25, 33, 42, 50, 0 };
+	static int	fire_frames[] = { 5, 0 };
+
+	Weapon_Generic(ent, 4, 12, 50, 54, pause_frames, fire_frames, Weapon_RocketLauncher_Fire);
 }
+
 
 
 void Weapon_HyperBlaster_Fire (edict_t *ent)
@@ -933,6 +943,7 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 	}
 
 }
+
 
 void Weapon_HyperBlaster (edict_t *ent)
 {
@@ -1430,5 +1441,52 @@ void Weapon_BFG (edict_t *ent)
 	Weapon_Generic (ent, 8, 32, 55, 58, pause_frames, fire_frames, weapon_bfg_fire);
 }
 
+
+/*
+======================================================================
+
+Custom
+
+======================================================================
+*/
+
+void Weapon_Spore_Fire(edict_t* ent, vec3_t g_offset, int damage, qboolean hyper, int effect)
+{
+	vec3_t	forward, right;
+	vec3_t	start;
+	vec3_t	offset;
+
+	if (is_quad)
+		damage *= 4;
+	AngleVectors(ent->client->v_angle, forward, right, NULL);
+	VectorSet(offset, 24, 8, ent->viewheight - 8);
+	VectorAdd(offset, g_offset, offset);
+	P_ProjectSource(ent->client, ent->s.origin, offset, forward, right, start);
+
+	VectorScale(forward, -2, ent->client->kick_origin);
+	ent->client->kick_angles[0] = -1;
+
+	fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
+
+	// send muzzle flash
+	gi.WriteByte(svc_muzzleflash);
+	gi.WriteShort(ent - g_edicts);
+	if (hyper)
+		gi.WriteByte(MZ_HYPERBLASTER | is_silenced);
+	else
+		gi.WriteByte(MZ_BLASTER | is_silenced);
+	gi.multicast(ent->s.origin, MULTICAST_PVS);
+
+	PlayerNoise(ent, start, PNOISE_WEAPON);
+}
+
+
+void Weapon_Spore(edict_t* ent)
+{
+	static int	pause_frames[] = { 39, 45, 50, 55, 0 };
+	static int	fire_frames[] = { 9, 17, 0 };
+
+	Weapon_Generic(ent, 8, 32, 55, 58, pause_frames, fire_frames, Weapon_Spore_Fire);
+}
 
 //======================================================================

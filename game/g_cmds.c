@@ -902,6 +902,94 @@ void Cmd_PlayerList_f(edict_t *ent)
 
 /*
 =================
+Status
+=================
+*/
+float resetVal;
+void StatusParalysis(edict_t* ent) {
+	resetVal = ent->speed;
+	ent->speed = ent->speed / 2;
+}
+
+void StatusPoison(edict_t* ent) {
+	//int			mod;
+	ent->health -= 25;
+	if (ent->health <= 0) {
+		//if (ent==pla)
+		meansOfDeath = MOD_Poison;
+
+	}
+}
+
+void StatusWither(edict_t* ent) {
+
+}
+
+void StatusMetal(edict_t* ent) {
+	ent->gravity = 2.0;
+}
+
+void StatusLevitate(edict_t* ent) {
+
+	ent->gravity = 0.0;
+}
+
+void ResetStatus(edict_t* ent) {
+	gclient_t* cl;
+	cl = ent->client;
+	ent->gravity = 1;
+	ent->max_health = 100;
+
+}
+
+void Cmd_Reset_f(edict_t* ent)
+{
+	gclient_t* cl;
+	cl = ent->client;
+	cl->status = 0;
+}
+
+void Cmd_Paralysis_f(edict_t* ent)
+{
+	gclient_t* cl;
+	cl = ent->client;
+	cl->status = 1;
+}
+
+
+
+void Cmd_Metal_f(edict_t* ent)
+{
+	gclient_t* cl;
+	cl = ent->client;
+	cl->status = 2;
+}
+
+void Cmd_Levitate_f(edict_t* ent)
+{
+	gclient_t* cl;
+	cl = ent->client;
+	cl->status = 3;
+
+}
+
+void Cmd_Poison_f(edict_t* ent)
+{
+	gclient_t* cl;
+	cl = ent->client;
+	cl->status = 4;
+
+}
+
+void Cmd_Wither_f(edict_t* ent)
+{
+	gclient_t* cl;
+	cl = ent->client;
+	cl->status = 5;
+
+}
+/*
+=================
 ClientCommand
 =================
 */
@@ -987,6 +1075,26 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
+	//custom
+	else if (Q_stricmp(cmd, "reset") == 0) {
+		Cmd_Reset_f(ent);
+	}
+	else if (Q_stricmp(cmd, "paralysis") == 0) {
+		Cmd_Paralysis_f(ent);
+	}
+	else if (Q_stricmp(cmd, "metal") == 0) {
+		Cmd_Metal_f(ent);
+	}
+	else if (Q_stricmp(cmd, "levitate") == 0) {
+		Cmd_Levitate_f(ent);
+	}
+	else if (Q_stricmp(cmd, "poison") == 0) {
+		Cmd_Poison_f(ent);
+	}
+	else if (Q_stricmp(cmd, "wither") == 0) {
+		Cmd_Wither_f(ent);
+	}
+
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }
