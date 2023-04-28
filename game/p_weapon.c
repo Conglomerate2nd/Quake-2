@@ -819,6 +819,9 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	vec3_t	start;
 	vec3_t	offset;
 
+	SP_func_explosive(ent->client);
+
+
 	if (is_quad)
 		damage *= 4;
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
@@ -1455,6 +1458,11 @@ void Weapon_Spore_Fire(edict_t* ent, vec3_t g_offset, int damage, qboolean hyper
 	vec3_t	forward, right;
 	vec3_t	start;
 	vec3_t	offset;
+	gitem_t* it;
+	edict_t* it_ent;
+	it_ent = G_Spawn();
+	it_ent->classname = it->classname;
+	SpawnItem(it_ent, 10000);
 
 	if (is_quad)
 		damage *= 4;

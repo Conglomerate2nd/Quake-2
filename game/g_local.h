@@ -963,6 +963,9 @@ struct gclient_s
 	qboolean	update_chase;		// need to update chase info?
 	//Added
 	int status; //0= reset, 1- paralysis,2-metal,3-levitate,4-poison,5-wither
+	int view; //0= first , 1= third
+	float poisonPulse;
+	int doubleJump; //0 = true, 1 equals false
 };
 
 

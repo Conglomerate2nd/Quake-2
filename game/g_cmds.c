@@ -981,7 +981,7 @@ void Cmd_Poison_f(edict_t* ent)
 
 }
 
-void Cmd_Wither_f(edict_t* ent)
+void Cmd_Speed_f(edict_t* ent)
 {
 	gclient_t* cl;
 	cl = ent->client;
@@ -1091,8 +1091,8 @@ void ClientCommand (edict_t *ent)
 	else if (Q_stricmp(cmd, "poison") == 0) {
 		Cmd_Poison_f(ent);
 	}
-	else if (Q_stricmp(cmd, "wither") == 0) {
-		Cmd_Wither_f(ent);
+	else if (Q_stricmp(cmd, "regeneration") == 0) {
+		Cmd_Speed_f(ent);
 	}
 
 	else	// anything that doesn't match a command will be a chat

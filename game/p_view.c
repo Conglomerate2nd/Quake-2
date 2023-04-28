@@ -239,7 +239,7 @@ void SV_CalcViewOffset (edict_t *ent)
 		VectorClear (angles);
 
 		ent->client->ps.viewangles[ROLL] = 40;
-		ent->client->ps.viewangles[PITCH] = -15;
+		ent->client->ps.viewangles[PITCH] = -15;//-15
 		ent->client->ps.viewangles[YAW] = ent->client->killer_yaw;
 	}
 	else
@@ -297,8 +297,9 @@ void SV_CalcViewOffset (edict_t *ent)
 
 	// add view height
 
-	v[2] += ent->viewheight;
-
+	v[2] += ent->viewheight;//v[2] += ent->viewheight;
+	//v[0] += 10;
+	//v[1] += 10;
 	// add fall height
 
 	ratio = (ent->client->fall_time - level.time) / FALL_TIME;
