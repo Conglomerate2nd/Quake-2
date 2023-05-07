@@ -220,6 +220,7 @@ typedef struct
 
 // gitem_t->weapmodel for weapons indicates model index
 #define WEAP_BLASTER			1 
+
 #define WEAP_SHOTGUN			2 
 #define WEAP_SUPERSHOTGUN		3 
 #define WEAP_MACHINEGUN			4 
@@ -230,7 +231,21 @@ typedef struct
 #define WEAP_HYPERBLASTER		9 
 #define WEAP_RAILGUN			10
 #define WEAP_BFG				11
-
+#define WEAP_CUSTOM				1
+/*
+#define WEAP_BLASTER			1 
+#define WEAP_CUSTOM				2 
+#define WEAP_SHOTGUN			2 
+#define WEAP_SUPERSHOTGUN		3 
+#define WEAP_MACHINEGUN			4 
+#define WEAP_CHAINGUN			5 
+#define WEAP_GRENADES			6 
+#define WEAP_GRENADELAUNCHER	7 
+#define WEAP_ROCKETLAUNCHER		8 
+#define WEAP_HYPERBLASTER		9 
+#define WEAP_RAILGUN			10
+#define WEAP_BFG				11
+*/
 typedef struct gitem_s
 {
 	char		*classname;	// spawning name
@@ -735,6 +750,7 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
 void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick);
 void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius);
+void Weapon_Custom_Fire(edict_t* ent, vec3_t g_offset, int damage, qboolean hyper, int effect);
 
 //
 // g_ptrail.c
@@ -864,6 +880,7 @@ typedef struct
 	int			helpchanged;
 
 	qboolean	spectator;			// client is a spectator
+	int money;
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -964,8 +981,9 @@ struct gclient_s
 	//Added
 	int status; //0= reset, 1- paralysis,2-metal,3-levitate,4-poison,5-wither
 	int view; //0= first , 1= third
-	float poisonPulse;
+	float poisonPulse;//For both poison and regeneration
 	int doubleJump; //0 = true, 1 equals false
+	int money;
 };
 
 

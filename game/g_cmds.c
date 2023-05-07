@@ -163,7 +163,7 @@ void Cmd_Give_f (edict_t *ent)
 		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
-
+	
 	name = gi.args();
 
 	if (Q_stricmp(name, "all") == 0)
@@ -988,6 +988,107 @@ void Cmd_Speed_f(edict_t* ent)
 	cl->status = 5;
 
 }
+
+void Cmd_HELPMENU_f(edict_t* ent)
+{
+	gi.cprintf(ent, PRINT_HIGH, "New statuses:\n\tparalysis - slows movement\n\tmetal - invincible but heavier\n\tlevitate - float\n\tpoison- poison damage\n\tregeneration - heals overtime\n\nThese are case sensitive\nShop lists the menu and you type the item name- Wallet for money");
+
+}
+
+typedef struct shopITEMS
+{
+	int place;
+	char* type;
+	char* name;
+	int price;
+	int status;
+} shopITEMS;
+
+Cmd_InitWallet_f(edict_t* ent) {
+	gclient_t* cl;
+	cl = ent->client;
+	cl->pers.money = 501;
+}
+
+Cmd_Wallet_f(edict_t *ent) {
+	gclient_t* cl;
+	cl = ent->client;
+	gi.cprintf(ent, PRINT_HIGH, "You have %i", cl->pers.money);
+}
+
+void Cmd_Shop_f(edict_t* ent)
+{
+
+	char* name;
+	gitem_t* it;
+	int			index;
+	int			i;
+	qboolean	give_all;
+	edict_t* it_ent;
+	gclient_t* cl;
+	cl = ent->client;
+	char num;
+	int money;
+	int exit=1;
+	//while (exit == 1) {
+		//money = cl->money;
+		gi.cprintf(ent, PRINT_HIGH, "Welcome to the trade shop, Heres the Menu\n");
+		//Items are set and hard coded
+		//gi.cprintf(ent, PRINT_HIGH,cl->money);
+		gi.cprintf(ent, PRINT_HIGH, "\nParalysis_Drink - 100\nMetal_Drink - 100\nFloaty_Drink - 100\nPoison_Drink - 100\nRegen_Drink - 100\nMilk - 100000000");
+		
+	}
+
+	//gi.cprintf(ent, PRINT_HIGH, "Welcome to the trade shop, what can I get you\n");
+	/*
+	shopITEMS storage[] = {
+		{1,"status","Levitate Drink",100,3},
+		{2,"Weapon","Rocket Launcher",1000,NULL}//,
+		//{3,"Item","Power Armor",10000,NULL}
+	};
+	shopITEMS f;
+
+	gi.cprintf(ent, PRINT_HIGH, "Welcome to the trade shop, what can I get you\n");
+	//Items are set and hard coded
+
+	while (exit != 0) {
+
+		gi.cprintf(ent, PRINT_HIGH, cl->money);
+		for (int j = 0; j <= storage; j++) {
+			gi.cprintf(ent, PRINT_HIGH, storage[j].place," -- ", storage[j].name, storage[j].price);
+		}
+		gi.cprintf(ent, PRINT_HIGH, "0  --  Exit");
+		num = gi.args();
+		if (num == 0) {
+			exit = 0;
+			
+		}else{
+			for (int j = 0; j <= storage; j++) {
+				if (num == storage[j].place) {
+					if (cl->money >= storage[j].price) {
+						cl->money -= storage[j].price;
+						if (Q_stricmp(storage[j].type, "status") == 0) {
+							cl->status == storage[j].status;
+						}
+						/
+					}
+					break;
+				}
+			}
+
+		}
+
+
+		Q_stricmp(name, "all");
+	}
+
+	gi.cprintf(ent, PRINT_HIGH, "Bye Come Again");*/
+
+	Cmd_NotEnough_f(edict_t* ent) {
+		gi.cprintf(ent, PRINT_HIGH, "You don't have enough\n");
+	}
+
+//gi.cprintf(ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
 /*
 =================
 ClientCommand
@@ -996,7 +1097,8 @@ ClientCommand
 void ClientCommand (edict_t *ent)
 {
 	char	*cmd;
-
+	gclient_t* cl;
+	cl = ent->client;
 	if (!ent->client)
 		return;		// not fully in game yet
 
@@ -1076,25 +1178,59 @@ void ClientCommand (edict_t *ent)
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
 	//custom
+	else if (Q_stricmp(cmd, "Milk") == 0) {
+		if (cl->money >= 100000000) {
+			Cmd_Reset_f(ent);
+			cl->money -= 100000000;
+		}
+		else Cmd_NotEnough_f(ent);
+	}
 	else if (Q_stricmp(cmd, "reset") == 0) {
 		Cmd_Reset_f(ent);
 	}
-	else if (Q_stricmp(cmd, "paralysis") == 0) {
-		Cmd_Paralysis_f(ent);
+	else if (Q_stricmp(cmd, "Paralysis_Drink") == 0) {
+		if (cl->pers.money >= 100) {
+			Cmd_Paralysis_f(ent);
+			cl->pers.money -= 100;
+		}else Cmd_NotEnough_f(ent);
 	}
-	else if (Q_stricmp(cmd, "metal") == 0) {
-		Cmd_Metal_f(ent);
+	else if (Q_stricmp(cmd, "Metal_Drink") == 0) {
+		if (cl->pers.money >= 100) {
+			Cmd_Metal_f(ent);
+			cl->pers.money -= 100;
+		}
+		else Cmd_NotEnough_f(ent);
 	}
-	else if (Q_stricmp(cmd, "levitate") == 0) {
-		Cmd_Levitate_f(ent);
+	else if (Q_stricmp(cmd, "Floaty_Drink") == 0) {
+		if (cl->pers.money >= 100) {
+			Cmd_Levitate_f(ent);
+			cl->pers.money -= 100;
+		}
+		else Cmd_NotEnough_f(ent);
 	}
-	else if (Q_stricmp(cmd, "poison") == 0) {
-		Cmd_Poison_f(ent);
+	else if (Q_stricmp(cmd, "Poison_Drink") == 0) {
+		if (cl->pers.money >= 100) {
+			Cmd_Poison_f(ent);
+			cl->pers.money -= 100;
+		}
+		else Cmd_NotEnough_f(ent);
 	}
-	else if (Q_stricmp(cmd, "regeneration") == 0) {
-		Cmd_Speed_f(ent);
+	else if (Q_stricmp(cmd, "Regen_Drink") == 0) {
+		if (cl->pers.money >= 100) {
+			Cmd_Speed_f(ent);
+			cl->pers.money -= 100;
+		}
+		else Cmd_NotEnough_f(ent);
 	}
-
+	else if (Q_stricmp(cmd, "helpMOD") == 0) {
+		Cmd_HELPMENU_f(ent);
+	}
+	else if (Q_stricmp(cmd, "shop") == 0) {
+		Cmd_Shop_f(ent);
+	}
+	else if (Q_stricmp(cmd, "wallet") == 0) {
+		Cmd_Wallet_f(ent);
+	}
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }

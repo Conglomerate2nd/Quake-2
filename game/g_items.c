@@ -35,6 +35,7 @@ void Weapon_Grenade (edict_t *ent);
 void Weapon_GrenadeLauncher (edict_t *ent);
 void Weapon_Railgun (edict_t *ent);
 void Weapon_BFG (edict_t *ent);
+void Weapon_Custom(edict_t* ent);
 
 gitem_armor_t jacketarmor_info	= { 25,  50, .30, .00, ARMOR_JACKET};
 gitem_armor_t combatarmor_info	= { 50, 100, .60, .30, ARMOR_COMBAT};
@@ -1309,6 +1310,7 @@ always owned, never in the world
 /* precache */ "weapons/blastf1a.wav misc/lasfly.wav"
 	},
 
+
 /*QUAKED weapon_shotgun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
@@ -1537,6 +1539,31 @@ always owned, never in the world
 		NULL,
 		0,
 /* precache */ "sprites/s_bfg1.sp2 sprites/s_bfg2.sp2 sprites/s_bfg3.sp2 weapons/bfg__f1y.wav weapons/bfg__l1a.wav weapons/bfg__x1b.wav weapons/bfg_hum.wav"
+	},
+			//ADDED HERE FOR CONVIENCE
+		/* weapon_blaster (.3 .3 1) (-16 -16 -16) (16 16 16)
+	always owned, never in the world
+	*/
+	{
+		"weapon_custom",
+		Pickup_Weapon,
+		Use_Weapon,
+		Drop_Weapon,
+		Weapon_Custom,
+		"misc/w_pkup.wav",
+		NULL,
+		0,
+		"models/weapons/v_blast/tris.md2",
+		/* icon */		"i_powershield",
+		/* pickup */	"custom",
+				0,
+				0,
+				NULL,
+				IT_WEAPON | IT_STAY_COOP,
+				WEAP_SHOTGUN,
+				NULL,
+				0,
+				/* precache */ "weapons/shotgf1b.wav weapons/shotgr1b.wav"
 	},
 
 	//

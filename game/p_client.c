@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "g_local.h"
 #include "m_player.h"
+//#include "g_cmds.c"
 
 void ClientUserinfoChanged (edict_t *ent, char *userinfo);
 
@@ -607,20 +608,41 @@ This is only called when the game first initializes in single player,
 but is called after each death and level change in deathmatch
 ==============
 */
+
+#define MAX_DISPLAYNAME 16
+#define MAX_PLAYERMODELS 1024
+/*
+typedef struct
+{
+	int		nskins;
+	char** skindisplaynames;
+	char	displayname[MAX_DISPLAYNAME];
+	char	directory[MAX_QPATH];
+} playermodelinfo_s;
+
+static playermodelinfo_s s_pmi[MAX_PLAYERMODELS];
+static char* s_pmnames[MAX_PLAYERMODELS];
+static int s_numplayermodels;
+*/
 void InitClientPersistant (gclient_t *client)
 {
 	gitem_t		*item;
 	int i;
-
+	edict_t *ent;
+	
+	ent = ent->client;
+	
 	memset (&client->pers, 0, sizeof(client->pers));
 
 	item = FindItem("Blaster");
 	client->pers.selected_item = ITEM_INDEX(item);
 	client->pers.inventory[client->pers.selected_item] = 1;
 
+	//
 	client->pers.weapon = item;
+
 	//Cmd_Give_f(client);
-	for (i = 0; i < game.num_items; i++)
+	/*for (i = 0; i < game.num_items; i++)
 	{
 		item = itemlist + i;
 		if (!item->pickup)
@@ -629,9 +651,10 @@ void InitClientPersistant (gclient_t *client)
 			continue;
 		client->pers.inventory[i] += 1;
 		Add_Ammo(client, item, 1000);
-	}
+	}*/
 	client->status = 0;
-
+	//Cmd_InitWallet_f(ent);
+	client->pers.money = 501;
 	client->pers.health			= 100;
 	client->pers.max_health		= 100;
 
@@ -643,15 +666,22 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.max_slugs		= 50;
 
 	client->pers.connected = true;
+	
+	//self->s.modelindex = gi.modelindex(client->self);
+	 //viewmodel(ent->model);
+	 //model_t* loadmodel;
+	 
 }
 
 
 void InitClientResp (gclient_t *client)
 {
+	int cash = client->money;
 	memset (&client->resp, 0, sizeof(client->resp));
 	client->resp.enterframe = level.framenum;
 	client->resp.coop_respawn = client->pers;
 	client->status = 0;
+	client->money = cash;
 }
 
 /*
@@ -1593,7 +1623,8 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 
 	level.current_entity = ent;
 	client = ent->client;
-
+	//coop->value = true;
+	//GetChaseTarget(ent);
 	if (level.intermissiontime)
 	{
 		client->ps.pmove.pm_type = PM_FREEZE;
@@ -1759,12 +1790,12 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 		if (client->resp.spectator) {
 
 			client->latched_buttons = 0;
-
+			/*
 			if (client->chase_target) {
 				client->chase_target = NULL;
 				client->ps.pmove.pm_flags &= ~PMF_NO_PREDICTION;
 			}
-			else
+			else*/
 				GetChaseTarget(ent);
 
 		}
@@ -1773,7 +1804,7 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 			Think_Weapon(ent);
 		}
 	}
-
+	
 	if (client->resp.spectator) {
 		if (ucmd->upmove >= 10) {
 			if (!(client->ps.pmove.pm_flags & PMF_JUMP_HELD)) {
@@ -1788,13 +1819,16 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 			client->ps.pmove.pm_flags &= ~PMF_JUMP_HELD;
 	}
 
+
+	
 	// update chase cam if being followed
 	for (i = 1; i <= maxclients->value; i++) {
 		other = g_edicts + i;
 		if (other->inuse && other->client->chase_target == ent)
-			UpdateChaseCam(other);
+			UpdateChaseCam(other);//other
 	}
-
+	
+	//UpdateChaseCam(other);//other
 
 	if (client->status == 2) {
 
@@ -1829,18 +1863,22 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 		if (client->poisonPulse < 50) {
 			client->poisonPulse += 1;
 		}
-		else if (ent->health > 0) {
+		else if (ent->health > 0 && ent->health < ent->max_health ) {
 			ent->health += 5;
 			client->poisonPulse = 0;//
 		}
-		/*
-		if (ent->health <= 0) {
-			meansOfDeath = MOD_Poison;
-			//player_die(client, client, client,34,ent->pos1);
-			Cmd_Kill_f(ent);
-			//ClientObituary(client, client, client);
-		}*/
+
 	}
+	//void	(*setmodel) (edict_t* ent, char* name);
+	//gi.setmodel(ent, ent->model);
+	//gi.setmodel(ent, ent->item->world_model);
+	//G_RunEntity(ent);- crashes
+	// 
+	//G_FreeEdict(ent);
+	//SP_info_player_start( ent);
+
+	//AI_SetSightClient();
+	//UpdateChaseCam(ent);
 }
 
 

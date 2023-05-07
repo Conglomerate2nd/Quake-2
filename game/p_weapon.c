@@ -764,6 +764,7 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	float	damage_radius;
 	int		radius_damage;
 
+	
 	damage = 100 + (int)(random() * 20.0);
 	radius_damage = 120;
 	damage_radius = 120;
@@ -789,11 +790,13 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 
 	ent->client->ps.gunframe++;
-
+	//spawn_t	spawn
+	//SP_misc_explobox(ent);
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	
 }
 
 void Weapon_RocketLauncher (edict_t *ent)
@@ -819,8 +822,7 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	vec3_t	start;
 	vec3_t	offset;
 
-	SP_func_explosive(ent->client);
-
+	
 
 	if (is_quad)
 		damage *= 4;
@@ -844,6 +846,7 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
+	ED_CallSpawn("misc_blackhole");
 }
 
 
@@ -1453,7 +1456,7 @@ Custom
 ======================================================================
 */
 
-void Weapon_Spore_Fire(edict_t* ent, vec3_t g_offset, int damage, qboolean hyper, int effect)
+void Weapon_Custom_Fire(edict_t* ent, vec3_t g_offset, int damage, qboolean hyper, int effect)
 {
 	vec3_t	forward, right;
 	vec3_t	start;
@@ -1462,7 +1465,7 @@ void Weapon_Spore_Fire(edict_t* ent, vec3_t g_offset, int damage, qboolean hyper
 	edict_t* it_ent;
 	it_ent = G_Spawn();
 	it_ent->classname = it->classname;
-	SpawnItem(it_ent, 10000);
+	//SpawnItem(it_ent, "misc_explobox");
 
 	if (is_quad)
 		damage *= 4;
@@ -1489,12 +1492,12 @@ void Weapon_Spore_Fire(edict_t* ent, vec3_t g_offset, int damage, qboolean hyper
 }
 
 
-void Weapon_Spore(edict_t* ent)
+void Weapon_Custom(edict_t* ent)
 {
 	static int	pause_frames[] = { 39, 45, 50, 55, 0 };
 	static int	fire_frames[] = { 9, 17, 0 };
 
-	Weapon_Generic(ent, 8, 32, 55, 58, pause_frames, fire_frames, Weapon_Spore_Fire);
+	Weapon_Generic(ent, 8, 32, 55, 58, pause_frames, fire_frames, weapon_bfg_fire);
 }
 
 //======================================================================

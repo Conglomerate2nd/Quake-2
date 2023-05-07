@@ -1,3 +1,45 @@
+README
+
+To download this mod, either run the solution for game and hit build, or move the included gamex86.dll file into a new folder in the 
+branch "C:\Program Files (x86)\Steam\steamapps\common\Quake 2"
+
+About this mod
+
+This mod has 5 main features/deliverables
+	- 5 statuses
+	- A shop
+	- Third Person
+	- 5 New/Replaced Weapons
+	- 5 Movement Abilitys
+
+The 5 status, are 
+Paralysis which decreases movement speed
+Metal which decreases jump height but, makes you invincible
+Levitae which increases jump height
+Poison which ticks away at health
+Regeneration which heals over time.
+
+These are able to be inflicted on the player by buying at the shop
+
+type shop in console to see the menu, as well as the name of the drinks for each status, wallet to see how much you have, set to 501 for 
+presentation, and the names of the drinks to get the status at a cost.
+
+As of right now, the last three do not work.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 This is the complete source code for Quake 2, version 3.19, buildable with
 visual C++ 6.0.  The linux version should be buildable, but we haven't
