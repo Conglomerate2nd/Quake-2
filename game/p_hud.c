@@ -343,6 +343,7 @@ Cmd_Help_f
 Display the current help message
 ==================
 */
+/*
 void Cmd_Help_f (edict_t *ent)
 {
 	// this is for backwards compatability
@@ -366,8 +367,14 @@ void Cmd_Help_f (edict_t *ent)
 	HelpComputer (ent);
 }
 
+*/
+//===========
+void Cmd_Help_f(edict_t* ent)
+{
+	gi.centerprintf(ent, "New statuses:\n\tparalysis - slows movement\n\tmetal - invincible but heavier\n\tlevitate - float\n\tpoison- poison damage\n\tregeneration - heals overtime\n\nThese are case sensitive\nShop lists the menu and you type the item name- Wallet for money");
 
-//=======================================================================
+	HelpComputer(ent);
+}//============================================================
 
 /*
 ===============
@@ -569,3 +576,10 @@ void G_SetSpectatorStats (edict_t *ent)
 		cl->ps.stats[STAT_CHASE] = 0;
 }
 
+void DisplayHelp(edict_t* ent) {
+	gclient_t *cl;
+	cl = ent->client;
+	if(cl->display!= 1){
+		gi.centerprintf(ent, "New statuses:\n\tparalysis - slows movement\n\tmetal - invincible but heavier\n\tlevitate - float\n\tpoison- poison damage\n\tregeneration - heals overtime\n\nThese are case sensitive\nShop lists the menu and you type the item name- Wallet for money");
+	}
+}

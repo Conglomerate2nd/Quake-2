@@ -1879,6 +1879,7 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 
 	//AI_SetSightClient();
 	//UpdateChaseCam(ent);
+	//DisplayHelp(ent);
 }
 
 

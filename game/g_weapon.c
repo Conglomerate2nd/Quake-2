@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include "g_local.h"
-
+//#include "g_spawn.c"
 
 /*
 =================
@@ -374,11 +374,11 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 	bolt->think = G_FreeEdict;
 	bolt->dmg = damage;
 	bolt->classname = "bolt";
-	if (hyper)
+	//if (hyper)
 		bolt->spawnflags = 1;
 	gi.linkentity (bolt);
 
-	if (self->client)
+	//if (self->client)
 		check_dodge (self, bolt->s.origin, dir, speed);
 
 	tr = gi.trace (self->s.origin, NULL, NULL, bolt->s.origin, bolt, MASK_SHOT);
@@ -386,7 +386,9 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 	{
 		VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
 		bolt->touch (bolt, tr.ent, NULL, NULL);
+		//spawn_classname_at("misc_explobox", bolt->s.origin);
 	}
+
 }	
 
 
@@ -448,7 +450,7 @@ static void Grenade_Explode (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-
+	spawn_classname_at("misc_explobox", origin);
 	G_FreeEdict (ent);
 }
 
@@ -571,6 +573,7 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	vec3_t		origin;
 	int			n;
 
+	
 	if (other == ent->owner)
 		return;
 
@@ -613,7 +616,10 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 		gi.WriteByte (TE_ROCKET_EXPLOSION);
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-
+	
+	
+	
+	
 	G_FreeEdict (ent);
 }
 
@@ -642,11 +648,23 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->dmg_radius = damage_radius;
 	rocket->s.sound = gi.soundindex ("weapons/rockfly.wav");
 	rocket->classname = "rocket";
-
+	
 	if (self->client)
 		check_dodge (self, rocket->s.origin, dir, speed);
-
+	
+	/*
+	if (self->timer == NULL) {
+		self->timer = 0;
+	}
+	else {
+		self->timer++;
+	}
+	if (self->timer % 4 == 0) {
+		//rocket->think = G_FreeEdict;
+	}*/
+	//rocket->think = G_FreeEdict;
 	gi.linkentity (rocket);
+	
 }
 
 

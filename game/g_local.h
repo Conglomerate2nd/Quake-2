@@ -984,6 +984,7 @@ struct gclient_s
 	float poisonPulse;//For both poison and regeneration
 	int doubleJump; //0 = true, 1 equals false
 	int money;
+	int display;
 };
 
 
@@ -1134,5 +1135,7 @@ struct edict_s
 	// common data blocks
 	moveinfo_t		moveinfo;
 	monsterinfo_t	monsterinfo;
+	//added
+	//int timer;
 };
 

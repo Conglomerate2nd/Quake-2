@@ -1038,10 +1038,15 @@ void misc_blackhole_think (edict_t *self)
 		self->s.frame = 0;
 		self->nextthink = level.time + FRAMETIME;
 	}
+	//GunnerFire(self);
+	edict_t* inflictor;
+	gclient_t client;
+	CanDamage(self, inflictor);
 }
 
 void SP_misc_blackhole (edict_t *ent)
 {
+	//ent->movetype = MOVETYPE_WALK;
 	ent->movetype = MOVETYPE_NONE;
 	ent->solid = SOLID_NOT;
 	VectorSet (ent->mins, -64, -64, 0);

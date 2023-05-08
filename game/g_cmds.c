@@ -992,6 +992,11 @@ void Cmd_Speed_f(edict_t* ent)
 void Cmd_HELPMENU_f(edict_t* ent)
 {
 	gi.cprintf(ent, PRINT_HIGH, "New statuses:\n\tparalysis - slows movement\n\tmetal - invincible but heavier\n\tlevitate - float\n\tpoison- poison damage\n\tregeneration - heals overtime\n\nThese are case sensitive\nShop lists the menu and you type the item name- Wallet for money");
+	gi.centerprintf(ent, "New statuses:\n\tparalysis - slows movement\n\tmetal - invincible but heavier\n\tlevitate - float\n\tpoison- poison damage\n\tregeneration - heals overtime\n\nThese are case sensitive\nShop lists the menu and you type the item name- Wallet for money");
+	gclient_t* cl;
+	cl = ent->client;
+	cl->display == 1;
+	//gi.centerprint(ent, PRINT_HIGH, "New statuses:\n\tparalysis - slows movement\n\tmetal - invincible but heavier\n\tlevitate - float\n\tpoison- poison damage\n\tregeneration - heals overtime\n\nThese are case sensitive\nShop lists the menu and you type the item name- Wallet for money");
 
 }
 
@@ -1035,7 +1040,7 @@ void Cmd_Shop_f(edict_t* ent)
 		gi.cprintf(ent, PRINT_HIGH, "Welcome to the trade shop, Heres the Menu\n");
 		//Items are set and hard coded
 		//gi.cprintf(ent, PRINT_HIGH,cl->money);
-		gi.cprintf(ent, PRINT_HIGH, "\nParalysis_Drink - 100\nMetal_Drink - 100\nFloaty_Drink - 100\nPoison_Drink - 100\nRegen_Drink - 100\nMilk - 100000000");
+		gi.cprintf(ent, PRINT_HIGH, "\nParalysis_Drink - 100\nMetal_Drink - 100\nFloaty_Drink - 100\nPoison_Drink - 100\nRegen_Drink - 100\nMilk - 100000000\nGive - 501");
 		
 	}
 
@@ -1088,6 +1093,17 @@ void Cmd_Shop_f(edict_t* ent)
 		gi.cprintf(ent, PRINT_HIGH, "You don't have enough\n");
 	}
 
+	Cmd_ThankYou_f(edict_t* ent) {
+		gi.cprintf(ent, PRINT_HIGH, "Thank you Please come again\n");
+	}
+	Cmd_Reload_f(edict_t* ent) {
+		gclient_t* cl;
+		cl = ent->client;
+		cl->pers.money += 1000;
+		gi.cprintf(ent, PRINT_HIGH, "You have %i", cl->pers.money);
+	}
+
+
 //gi.cprintf(ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
 /*
 =================
@@ -1137,8 +1153,15 @@ void ClientCommand (edict_t *ent)
 		Cmd_Use_f (ent);
 	else if (Q_stricmp (cmd, "drop") == 0)
 		Cmd_Drop_f (ent);
-	else if (Q_stricmp (cmd, "give") == 0)
-		Cmd_Give_f (ent);
+	else if (Q_stricmp (cmd, "give") == 0){
+		
+			if (cl->pers.money >= 501) {
+				Cmd_Give_f(ent);
+				cl->pers.money -= 501;
+				Cmd_ThankYou_f(ent);
+			}
+			else Cmd_NotEnough_f(ent);
+	}
 	else if (Q_stricmp (cmd, "god") == 0)
 		Cmd_God_f (ent);
 	else if (Q_stricmp (cmd, "notarget") == 0)
@@ -1179,9 +1202,10 @@ void ClientCommand (edict_t *ent)
 		Cmd_PlayerList_f(ent);
 	//custom
 	else if (Q_stricmp(cmd, "Milk") == 0) {
-		if (cl->money >= 100000000) {
+		if (cl->pers.money >= 100000000) {
 			Cmd_Reset_f(ent);
-			cl->money -= 100000000;
+			cl->pers.money -= 100000000;
+			Cmd_ThankYou_f(ent);
 		}
 		else Cmd_NotEnough_f(ent);
 	}
@@ -1192,12 +1216,15 @@ void ClientCommand (edict_t *ent)
 		if (cl->pers.money >= 100) {
 			Cmd_Paralysis_f(ent);
 			cl->pers.money -= 100;
-		}else Cmd_NotEnough_f(ent);
+			Cmd_ThankYou_f(ent);
+		}
+		else Cmd_NotEnough_f(ent);
 	}
 	else if (Q_stricmp(cmd, "Metal_Drink") == 0) {
 		if (cl->pers.money >= 100) {
 			Cmd_Metal_f(ent);
 			cl->pers.money -= 100;
+			Cmd_ThankYou_f(ent);
 		}
 		else Cmd_NotEnough_f(ent);
 	}
@@ -1205,6 +1232,7 @@ void ClientCommand (edict_t *ent)
 		if (cl->pers.money >= 100) {
 			Cmd_Levitate_f(ent);
 			cl->pers.money -= 100;
+			Cmd_ThankYou_f(ent);
 		}
 		else Cmd_NotEnough_f(ent);
 	}
@@ -1212,6 +1240,7 @@ void ClientCommand (edict_t *ent)
 		if (cl->pers.money >= 100) {
 			Cmd_Poison_f(ent);
 			cl->pers.money -= 100;
+			Cmd_ThankYou_f(ent);
 		}
 		else Cmd_NotEnough_f(ent);
 	}
@@ -1219,6 +1248,7 @@ void ClientCommand (edict_t *ent)
 		if (cl->pers.money >= 100) {
 			Cmd_Speed_f(ent);
 			cl->pers.money -= 100;
+			Cmd_ThankYou_f(ent);
 		}
 		else Cmd_NotEnough_f(ent);
 	}
@@ -1230,6 +1260,9 @@ void ClientCommand (edict_t *ent)
 	}
 	else if (Q_stricmp(cmd, "wallet") == 0) {
 		Cmd_Wallet_f(ent);
+	}
+	else if (Q_stricmp(cmd, "reload") == 0) {
+		Cmd_Reload_f(ent);
 	}
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);

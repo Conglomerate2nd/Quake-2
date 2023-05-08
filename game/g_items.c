@@ -1438,7 +1438,7 @@ always owned, never in the world
 		"models/weapons/g_launch/tris.md2", EF_ROTATE,
 		"models/weapons/v_launch/tris.md2",
 /* icon */		"w_glauncher",
-/* pickup */	"Grenade Launcher",
+/* pickup */	"Mine Setter",//"Grenade Launcher",
 		0,
 		1,
 		"Grenades",
@@ -1461,7 +1461,7 @@ always owned, never in the world
 		"models/weapons/g_rocket/tris.md2", EF_ROTATE,
 		"models/weapons/v_rocket/tris.md2",
 /* icon */		"w_rlauncher",
-/* pickup */	"Rocket Launcher",
+/* pickup */	"Blackhole Maker",//Rocket Launcher
 		0,
 		1,
 		"Rockets",

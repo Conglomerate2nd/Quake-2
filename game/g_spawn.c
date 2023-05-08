@@ -311,6 +311,17 @@ void ED_CallSpawn (edict_t *ent)
 	gi.dprintf ("%s doesn't have a spawn function\n", ent->classname);
 }
 
+edict_t* spawn_classname_at(const char* classname, vec3_t position) {
+	edict_t* ent = NULL;
+
+	ent = G_Spawn();
+	if (!ent)return NULL;
+	VectorCopy(position, ent->s.origin);
+	ent->classname = classname;
+	ED_CallSpawn(ent);
+	return ent;
+}
+
 /*
 =============
 ED_NewString
