@@ -1196,8 +1196,8 @@ void Chaingun_Fire (edict_t *ent)
 		fire_bullet (ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
 		fire_blaster(ent, start, forward, damage, 500, 500, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
 		fire_rocket(ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
-		fire_bullet(ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
-		fire_blaster(ent, start, forward, damage, 500, 500, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
+		fire_rocket(ent, start, forward, damage, 650, 300, 300);
+		
 	}
 
 	// send muzzle flash

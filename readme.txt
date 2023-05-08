@@ -24,7 +24,14 @@ These are able to be inflicted on the player by buying at the shop
 type shop in console to see the menu, as well as the name of the drinks for each status, wallet to see how much you have, set to 501 for 
 presentation, and the names of the drinks to get the status at a cost.
 
-As of right now, the last three do not work.
+There are 5 weapons changed
+Blaster fire a bfg and rocket
+Blackhole Maker makes black hole
+Mine Maker makes a mine(explobox) after launching a grenade
+Shotgun now fires a slow blaster shot
+Mayhem fires more bullets, with blaster shots and leaves projectiles where you stand.
+
+As of right now, the last two do not work.
 
 
 
